@@ -1,2 +1,2 @@
 # graphics
-graphics engine for Stuyvesant High School
+graphics engine for Stuyvesant High School's Graphics course
