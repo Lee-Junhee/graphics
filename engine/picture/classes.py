@@ -51,4 +51,4 @@ class Pixel:
 
     def value(self):
         color = self.color
-        return "{} {} {}".format(color[0], color[1], color[2])
+        return "%d %d %d" % (color[0], color[1], color[2])
