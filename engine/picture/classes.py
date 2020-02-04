@@ -15,6 +15,7 @@ class Picture:
            self.height = data[2]
            self.depth = data[3]
            self.pixels = Picture.load(data[4:], data[1], data[2], 0)
+           self.organize()
 
     def load(data, width, height, index):
         if len(data) == 0:
@@ -28,8 +29,8 @@ class Picture:
         self.width = width
         self.height = height
         self.depth = depth
-        for x in range(width):
-            for y in range(height):
+        for x in range(height):
+            for y in range(width):
                 self.pixels += [Pixel(x, y, self.color['background'])]
 
     def commit(self):
