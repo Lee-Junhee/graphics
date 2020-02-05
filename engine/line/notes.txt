@@ -28,6 +28,7 @@ new alg:
 		x += 1
 		if d > 0:
 			y += 1
+
 		plot(x, y)
 
 another thing to note:
@@ -35,3 +36,30 @@ f(x0, y0) = 0
 f(x0 + 1, y0 + 1/2) = A + 1/2 B
 
 can get rid of fxn
+
+Octant 1:
+	0 < m < 1
+	Possible Points:
+		(x+1, y), (x+1, y+1)
+	Midpoint:
+		(x+1, y+1/2)
+	Initial d: A + 1/2B
+
+x = x0
+d = 2A + B
+while x <= x1:
+	plot(x,y)
+	if d > 0:
+		y += 1
+		d += 2B
+	x += 1
+	d += 2A
+
+Octant 2:
+	1 < m
+	Possible Points: 
+		(x,y+1), (x+1,y+1)
+	Midpoint:
+		(x+1/2, y+1)
+	Initial d: 1/2A + B
+	flip d

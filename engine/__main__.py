@@ -1,4 +1,4 @@
-from picture.classes import Picture
+from canvas.classes import Picture
 
 p = Picture('pic.ppm', 1024, 1024, 511)
 

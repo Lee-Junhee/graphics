@@ -1,3 +1,5 @@
+from canvas.exceptions import OutOfBoundsException
+
 class Picture:
     fname = ''
     width = -1
@@ -15,7 +17,6 @@ class Picture:
            self.height = data[2]
            self.depth = data[3]
            self.pixels = Picture.load(data[4:], data[1], data[2], 0)
-           self.organize()
 
     def load(data, width, height, index):
         if len(data) == 0:
@@ -31,7 +32,16 @@ class Picture:
         self.depth = depth
         for x in range(height):
             for y in range(width):
-                self.pixels += [Pixel(x, y, self.color['background'])]
+                self.pixels += [Pixel(x, y, self.colors['background'])]
+
+    def get(self, x, y):
+        if x > self.width:
+            if y < self.height:
+                return self.pixels[self.width * y + x]
+            else:
+                raise OutOfBoundsException(f'given y-coordinate {y} is greater than picture height')
+        else:
+            raise OutOfBoundsException(f'given x-coordinate {x} is greater than picture width')
 
     def commit(self):
         with open(self.fname, 'w+') as pic:
@@ -54,12 +64,12 @@ class Pixel:
 
     def value(self):
         color = self.color.value()
-        return "%d %d %d" % (color[0], color[1], color[2])
+        return "%d %d %d" % (color[0](self.x, self.y), color[1](self.x, self.y), color[2](self.x, self.y))
 
 class Color:
-    r = -1
-    g = -1
-    b = -1
+    r = lambda x,y: -1
+    g = lambda x,y: -1
+    b = lambda x,y: -1
 
     def __init__(self, r, g, b):
         self.r = r
