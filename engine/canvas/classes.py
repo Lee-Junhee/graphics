@@ -25,7 +25,11 @@ class Picture:
             return [Pixel(index % width, index // height, Color(data[0], data[1], data[2]))] + Picture.load(data[3:], width, height, index + 1)
 
     def __init__(self, fname, width, height, depth):
-        self.color['background'] = Color(0, 0, 0)
+        self.colors['background'] = Color(
+                lambda x, y: 0,
+                lambda x, y: 0,
+                lambda x, y: 0
+                )
         self.fname = fname
         self.width = width
         self.height = height
@@ -34,14 +38,17 @@ class Picture:
             for y in range(width):
                 self.pixels += [Pixel(x, y, self.colors['background'])]
 
-    def get(self, x, y):
-        if x > self.width:
+    def set(self, x, y, color):
+        if x < self.width:
             if y < self.height:
-                return self.pixels[self.width * y + x]
+                self.pixels[self.width * y + x].color = color
             else:
                 raise OutOfBoundsException(f'given y-coordinate {y} is greater than picture height')
         else:
             raise OutOfBoundsException(f'given x-coordinate {x} is greater than picture width')
+
+    def addcolor(self, color):
+        self.colors[len(self.colors.keys())] = color
 
     def commit(self):
         with open(self.fname, 'w+') as pic:
