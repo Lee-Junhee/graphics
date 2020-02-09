@@ -41,14 +41,16 @@ class Picture:
     def set(self, x, y, color):
         if x < self.width:
             if y < self.height:
-                self.pixels[self.width * y + x].color = color
+                self.pixels[self.width * y + x].color = self.colors[color]
             else:
                 raise OutOfBoundsException(f'given y-coordinate {y} is greater than picture height')
         else:
             raise OutOfBoundsException(f'given x-coordinate {x} is greater than picture width')
 
     def addcolor(self, color):
-        self.colors[len(self.colors.keys())] = color
+        key = len(self.colors.keys())
+        self.colors[key] = color
+        return key 
 
     def commit(self):
         with open(self.fname, 'w+') as pic:
@@ -79,6 +81,9 @@ class Color:
     b = lambda x,y: -1
 
     def __init__(self, r, g, b):
+        self.setcolor(r, g, b)
+
+    def setcolor(self, r, g, b):
         self.r = r
         self.g = g
         self.b = b
