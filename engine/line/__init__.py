@@ -83,3 +83,8 @@ class Line:
             self.oct8(x0, y0, x1, y1)
         else:
             self.oct7(x0, y0, x1, y1)
+
+    def draw(self, matrix):
+        matrix = matrix.getContent()
+        for i in range(matrix.getEdges()):
+            self.draw(matrix[0][2 * i], matrix[1][2 * i], matrix[0][2 * i + 1], matrix[1][2 * i + 1])

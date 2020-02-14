@@ -1,4 +1,6 @@
-algorithm:
+# Drawing Lines
+
+#### algorithm:
 	for x0 -> x1:
 		test(x+1, y+1)
 		test(x+1, y)
@@ -22,7 +24,7 @@ use f(x + 1, y + 1/2) and compare that to 0
 if positive, the line is above (pick top)
 if negative, the line is below (pick bot)
 
-new alg:
+#### new alg:
 	for x0 -> x1:
 		d = f(x + 1, y + 1/2)
 		x += 1
@@ -31,13 +33,13 @@ new alg:
 
 		plot(x, y)
 
-another thing to note:
+###### another thing to note:
 f(x0, y0) = 0
 f(x0 + 1, y0 + 1/2) = A + 1/2 B
 
 can get rid of fxn
 
-Octant 1:
+###### Octant 1:
 	0 < m < 1
 	Possible Points:
 		(x+1, y), (x+1, y+1)
@@ -55,7 +57,7 @@ while x <= x1:
 	x += 1
 	d += 2A
 
-Octant 2:
+###### Octant 2:
 	1 < m
 	Possible Points: 
 		(x,y+1), (x+1,y+1)
