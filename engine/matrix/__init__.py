@@ -25,9 +25,6 @@ class Matrix:
     def getEdges(self):
         return int(self.edges)
 
-    def getContent(self):
-        return map(lambda x: map(lambda y: int(y), x), self.content)
-
     def addPoint(self, point):
         self.edges += 0.5
         for i in range(3):

@@ -70,7 +70,7 @@ class Line:
             x += 1
             d += 2 * A
 
-    def draw(self, x0, y0, x1, y1):
+    def drawLine(self, x0, y0, x1, y1):
         try:
             m = (y1 - y0) / (x1 - x0)
         except ZeroDivisionError:
@@ -85,6 +85,8 @@ class Line:
             self.oct7(x0, y0, x1, y1)
 
     def draw(self, matrix):
-        matrix = matrix.getContent()
-        for i in range(matrix.getEdges()):
-            self.draw(matrix[0][2 * i], matrix[1][2 * i], matrix[0][2 * i + 1], matrix[1][2 * i + 1])
+        edges = matrix.getEdges()
+        matrix = matrix.content
+        for i in range(edges):
+            self.drawLine(int(matrix[0][2 * i]), int(matrix[1][2 * i]), 
+                    int(matrix[0][2 * i + 1]), int(matrix[1][2 * i + 1]))
