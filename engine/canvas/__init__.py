@@ -1,4 +1,5 @@
 from canvas.exceptions import OutOfBoundsException
+import subprocess
 
 class Picture:
     fname = ''
@@ -8,23 +9,7 @@ class Picture:
     pixels = list()
     colors = dict()
 
-    def __init__(self, fname):
-        self.fname = fname
-        with open(fname, 'r') as pic:
-           raw = read(pic)
-           data = raw.split()
-           self.width = data[1]
-           self.height = data[2]
-           self.depth = data[3]
-           self.pixels = Picture.load(data[4:], data[1], data[2], 0)
-
-    def load(data, width, height, index):
-        if len(data) == 0:
-            return list()
-        else:
-            return [Pixel(index % width, index // height, Color(data[0], data[1], data[2]))] + Picture.load(data[3:], width, height, index + 1)
-
-    def __init__(self, fname, width, height, depth):
+    def __init__(self, fname, width=1024, height=1024, depth=256):
         self.colors['background'] = Color(
                 lambda x, y: 0,
                 lambda x, y: 0,
@@ -51,6 +36,15 @@ class Picture:
         key = len(self.colors.keys())
         self.colors[key] = color
         return key 
+
+    def clear(self):
+        for pixel in self.pixels:
+            pixel.color = self.colors['background']
+
+    def display(self):
+        self.commit()
+        subprocess.run(['display', 'self.fname'])
+        subprocess.run(['rm', self.fname])
 
     def commit(self):
         with open(self.fname, 'w+') as pic:
