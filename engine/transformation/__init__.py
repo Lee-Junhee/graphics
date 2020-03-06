@@ -1,8 +1,8 @@
 from matrix import Matrix
-from math import cos, sin
+from math import cos, sin, pi
 
 class Transformation():
-    transform = Matrix()
+    transform = None
 
     r = {
             "x": [1, 2],
@@ -11,6 +11,7 @@ class Transformation():
             }
 
     def __init__(self):
+        self.transform = Matrix()
         self.transform.ident()
 
     def scale(self, sx=1, sy=1, sz=1):
@@ -31,6 +32,7 @@ class Transformation():
     
     def rotate(self, axis="z", angle=0):
         r = self.r
+        angle = angle * pi / 180
         rotation = Matrix()
         rotation.ident()
         rotation.content[r[axis][0]][r[axis][0]] = cos(angle)
