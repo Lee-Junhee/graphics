@@ -23,7 +23,7 @@ def save(p, m, color, args):
 def parse(src, p, color):
     m = Matrix()
     t = Transformation()
-    param = Parametric(m)
+    param = Parametric(m, .0001)
     fxns = {
         'line': lambda args: m.addEdge((int(args[0]), int(args[1]), int(args[2])),(int(args[3]), int(args[4]), int(args[5]))),
         'scale': lambda args: t.scale(int(args[0]), int(args[1]), int(args[2])),
