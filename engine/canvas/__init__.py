@@ -9,7 +9,7 @@ class Picture:
     pixels = list()
     colors = dict()
 
-    def __init__(self, fname, width=1024, height=1024, depth=256):
+    def __init__(self, fname, width=500, height=500, depth=256):
         self.colors['background'] = Color(
                 lambda x, y: 0,
                 lambda x, y: 0,
@@ -26,7 +26,7 @@ class Picture:
     def set(self, x, y, color):
         if x < self.width:
             if y < self.height:
-                self.pixels[self.width * y + x].color = self.colors[color]
+                self.pixels[self.width * (self.height - y) + x].color = self.colors[color]
             else:
                 raise OutOfBoundsException(f'given y-coordinate {y} is greater than picture height')
         else:
@@ -43,7 +43,7 @@ class Picture:
 
     def display(self):
         self.commit()
-        subprocess.run(['display', 'self.fname'])
+        subprocess.run(['display', self.fname])
         subprocess.run(['rm', self.fname])
 
     def commit(self):
