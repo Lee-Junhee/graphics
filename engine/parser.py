@@ -25,10 +25,10 @@ def parse(src, p, color):
     t = Transformation()
     param = Parametric(m, .0001)
     fxns = {
-        'line': lambda args: m.addEdge((int(args[0]), int(args[1]), int(args[2])),(int(args[3]), int(args[4]), int(args[5]))),
-        'scale': lambda args: t.scale(int(args[0]), int(args[1]), int(args[2])),
-        'move': lambda args: t.move(int(args[0]), int(args[1]), int(args[2])),
-        'rotate': lambda args: t.rotate(args[0], int(args[1])),
+        'line': lambda args: m.addEdge((args[0], args[1], args[2]),(args[3], args[4], args[5])),
+        'scale': lambda args: t.scale(args[0], args[1], args[2]),
+        'move': lambda args: t.move(args[0], args[1], args[2]),
+        'rotate': lambda args: t.rotate(args[0], args[1]),
         'save': lambda args: save(p, m, color, args),
         'circle': lambda args: param.arc((args[0], args[1], args[2]), args[3]),
         'hermite': lambda args: param.hermite((args[0], args[1]), (args[2], args[3]), (args[4], args[5]), (args[6], args[7])),
@@ -73,8 +73,10 @@ def parse(src, p, color):
             pass
         else:
             args = cmd.split()
-            if cmdbuf != 'save':
-                for i in range(len(args)):
-                    args[i] = int(args[i])
+            for i in range(len(args)):
+                try:
+                    args[i] = float(args[i])
+                except ValueError:
+                    pass
             fxns[cmdbuf](args)
             cmdbuf = ''

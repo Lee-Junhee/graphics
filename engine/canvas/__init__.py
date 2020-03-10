@@ -24,13 +24,13 @@ class Picture:
                 self.pixels += [Pixel(x, y, self.colors['background'])]
 
     def set(self, x, y, color):
-        if x < self.width:
-            if y < self.height:
+        if -1 < x < self.width:
+            if -1 < y < self.height:
                 self.pixels[self.width * (self.height - y) + x].color = self.colors[color]
             else:
-                raise OutOfBoundsException(f'given y-coordinate {y} is greater than picture height')
+                raise OutOfBoundsException(f'given y-coordinate {y} does not exist in the picture')
         else:
-            raise OutOfBoundsException(f'given x-coordinate {x} is greater than picture width')
+            raise OutOfBoundsException(f'given x-coordinate {x} does not exist in the picture')
 
     def addcolor(self, color):
         key = len(self.colors.keys())
