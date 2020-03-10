@@ -9,7 +9,7 @@ class Picture:
     pixels = list()
     colors = dict()
 
-    def __init__(self, fname, width=500, height=500, depth=256):
+    def __init__(self, fname, width=500, height=500, depth=255):
         self.colors['background'] = Color(
                 lambda x, y: 0,
                 lambda x, y: 0,

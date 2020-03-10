@@ -134,3 +134,6 @@ dmypy.json
 #image files
 *.ppm
 *.png
+
+#script files
+script
