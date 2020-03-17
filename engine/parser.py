@@ -4,6 +4,7 @@ from line import Line
 from matrix import Matrix
 from transformation import Transformation
 from parametric import Parametric
+from frame import Frame
 import subprocess
 
 def save(p, m, color, args):
@@ -20,10 +21,23 @@ def save(p, m, color, args):
         subprocess.run(['rm', args[0][:-4]+'.ppm'])
     print(args[0])
 
+def clear(m):
+    for i in range(1, len(m[0]) + 1, 2):
+        if (m.content[0][-i], m.content[1][-i], m.content[2][-i]) == (m.content[0][-i - 1], m.content[1][-i - 1], m.content[2][-i - 1]):
+            m.content[0].pop(-i)
+            m.content[1].pop(-i)
+            m.content[2].pop(-i)
+            m.content[3].pop(-i)
+            m.content[0].pop(-i - 1)
+            m.content[1].pop(-i - 1)
+            m.content[2].pop(-i - 1)
+            m.content[3].pop(-i - 1)
+
 def parse(src, p, color):
     m = Matrix()
     t = Transformation()
     param = Parametric(m, .0001)
+    3d = Frame(m, .01)
     fxns = {
         'line': lambda args: m.addEdge((args[0], args[1], args[2]),(args[3], args[4], args[5])),
         'scale': lambda args: t.scale(args[0], args[1], args[2]),
@@ -33,6 +47,9 @@ def parse(src, p, color):
         'circle': lambda args: param.arc((args[0], args[1], args[2]), args[3]),
         'hermite': lambda args: param.hermite((args[0], args[1]), (args[2], args[3]), (args[4], args[5]), (args[6], args[7])),
         'bezier': lambda args: param.bezier((args[0], args[1]), (args[2], args[3]), (args[4], args[5]), (args[6], args[7])),
+        'box': lambda args: 3d.box(args[:3], args[3:6]),
+        'sphere': lambda args: 3d.spherei(args[:3], args[3]),
+        'torus': lambda args: 3d.torus(args[:3], args[3], args[4]),
             }
     with open(src,"r") as raw:
         commands = raw.readlines()
@@ -69,6 +86,14 @@ def parse(src, p, color):
             cmdbuf = 'hermite'
         elif cmd == 'bezier\n':
             cmdbuf = 'bezier'
+        elif cmd == 'clear\n':
+            clear(m)
+        elif cmd == 'box\n':
+            cmdbuf = 'box'
+        elif cmd == 'sphere\n':
+            cmdbuf = 'sphere'
+        elif cmd == 'torus\n':
+            cmdbuf = 'torus'
         elif cmd[0] == '#':
             pass
         else:
