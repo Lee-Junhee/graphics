@@ -22,22 +22,18 @@ def save(p, m, color, args):
     print(args[0])
 
 def clear(m):
-    for i in range(1, len(m[0]) + 1, 2):
-        if (m.content[0][-i], m.content[1][-i], m.content[2][-i]) == (m.content[0][-i - 1], m.content[1][-i - 1], m.content[2][-i - 1]):
-            m.content[0].pop(-i)
-            m.content[1].pop(-i)
-            m.content[2].pop(-i)
-            m.content[3].pop(-i)
-            m.content[0].pop(-i - 1)
-            m.content[1].pop(-i - 1)
-            m.content[2].pop(-i - 1)
-            m.content[3].pop(-i - 1)
+    m.content = [
+            [],
+            [],
+            [],
+            [],
+            ]
 
 def parse(src, p, color):
     m = Matrix()
     t = Transformation()
     param = Parametric(m, .0001)
-    3d = Frame(m, .01)
+    f = Frame(m, .01)
     fxns = {
         'line': lambda args: m.addEdge((args[0], args[1], args[2]),(args[3], args[4], args[5])),
         'scale': lambda args: t.scale(args[0], args[1], args[2]),
@@ -47,9 +43,9 @@ def parse(src, p, color):
         'circle': lambda args: param.arc((args[0], args[1], args[2]), args[3]),
         'hermite': lambda args: param.hermite((args[0], args[1]), (args[2], args[3]), (args[4], args[5]), (args[6], args[7])),
         'bezier': lambda args: param.bezier((args[0], args[1]), (args[2], args[3]), (args[4], args[5]), (args[6], args[7])),
-        'box': lambda args: 3d.box(args[:3], args[3:6]),
-        'sphere': lambda args: 3d.spherei(args[:3], args[3]),
-        'torus': lambda args: 3d.torus(args[:3], args[3], args[4]),
+        'box': lambda args: f.box(args[:3], args[3:6]),
+        'sphere': lambda args: f.sphere(args[:3], args[3]),
+        'torus': lambda args: f.torus(args[:3], args[3], args[4]),
             }
     with open(src,"r") as raw:
         commands = raw.readlines()
@@ -67,10 +63,14 @@ def parse(src, p, color):
         elif cmd == 'rotate\n':
             cmdbuf = 'rotate'
         elif cmd == 'apply\n':
+            print('apply')
+            t.transform.print()
             t.apply(m)
+            m.print()
             t = Transformation()
             cmdbuf = ''
         elif cmd == 'display\n':
+            print('display')
             p.clear()
             l = Line(p, color)
             l.draw(m)
@@ -87,6 +87,7 @@ def parse(src, p, color):
         elif cmd == 'bezier\n':
             cmdbuf = 'bezier'
         elif cmd == 'clear\n':
+            print('clear')
             clear(m)
         elif cmd == 'box\n':
             cmdbuf = 'box'
@@ -98,10 +99,13 @@ def parse(src, p, color):
             pass
         else:
             args = cmd.split()
+            fargs = list()
             for i in range(len(args)):
                 try:
-                    args[i] = float(args[i])
+                    fargs.append(float(args[i]))
                 except ValueError:
-                    pass
-            fxns[cmdbuf](args)
+                    fargs.append(args[i])
+            print(cmdbuf + ': ' + ','.join(args))
+            m.print()
+            fxns[cmdbuf](fargs)
             cmdbuf = ''

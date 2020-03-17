@@ -5,12 +5,12 @@ class Matrix:
     def multiply(m1, m2):
         #matrix multiplication code here
         for i in range(len(m2.content[0])):
-            col = [[0], [0], [0], [0]]
+            col = [0, 0, 0, 0]
             for j in range(4):
                 for k in range(4):
-                    col[k][0] += m1.content[k][j] * m2.content[j][i]
+                    col[k] += m1.content[k][j] * m2.content[j][i]
             for j in range(4):
-                m2.content[j][i] = col[j][0]
+                m2.content[j][i] = col[j]
 
     def __init__(self):
         self.content = [[], [], [], []]
