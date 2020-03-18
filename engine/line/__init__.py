@@ -1,3 +1,5 @@
+from canvas.exceptions import OutOfBoundsException
+
 class Line:
     pic = None
     color = -1
@@ -15,7 +17,10 @@ class Line:
         B = x0 - x1
         d = 2 * A + B
         while (x <= x1):
-            self.pic.set(x, y, self.color)
+            try:
+                self.pic.set(x, y, self.color)
+            except OutOfBoundsException:
+                pass
             if (d > 0):
                 y += 1
                 d += 2 * B
@@ -31,7 +36,10 @@ class Line:
         B = x0 - x1
         d = A + 2 * B
         while (y <= y1):
-            self.pic.set(x, y, self.color)
+            try:
+                self.pic.set(x, y, self.color)
+            except OutOfBoundsException:
+                pass
             if (d < 0):
                 x += 1
                 d += 2 * A
@@ -47,7 +55,10 @@ class Line:
         B = x0 - x1
         d = A - 2 * B
         while (y >= y1):
-            self.pic.set(x, y, self.color)
+            try:
+                self.pic.set(x, y, self.color)
+            except OutOfBoundsException:
+                pass
             if (d > 0):
                 x += 1
                 d += 2 * A
@@ -63,7 +74,10 @@ class Line:
         B = x0 - x1
         d = 2 * A - B
         while (x <= x1):
-            self.pic.set(x, y, self.color)
+            try:
+                self.pic.set(x, y, self.color)
+            except OutOfBoundsException:
+                pass
             if (d < 0):
                 y -= 1
                 d -= 2 * B

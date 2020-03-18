@@ -21,19 +21,11 @@ def save(p, m, color, args):
         subprocess.run(['rm', args[0][:-4]+'.ppm'])
     print(args[0])
 
-def clear(m):
-    m.content = [
-            [],
-            [],
-            [],
-            [],
-            ]
-
 def parse(src, p, color):
     m = Matrix()
     t = Transformation()
     param = Parametric(m, .0001)
-    f = Frame(m, .01)
+    f = Frame(m, .1)
     fxns = {
         'line': lambda args: m.addEdge((args[0], args[1], args[2]),(args[3], args[4], args[5])),
         'scale': lambda args: t.scale(args[0], args[1], args[2]),
@@ -88,7 +80,8 @@ def parse(src, p, color):
             cmdbuf = 'bezier'
         elif cmd == 'clear\n':
             print('clear')
-            clear(m)
+            m = Matrix()
+            cmdbuf = ''
         elif cmd == 'box\n':
             cmdbuf = 'box'
         elif cmd == 'sphere\n':

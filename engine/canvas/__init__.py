@@ -26,7 +26,10 @@ class Picture:
     def set(self, x, y, color):
         if -1 < x < self.width:
             if -1 < y < self.height:
-                self.pixels[self.width * (self.height - y) + x].color = self.colors[color]
+                try:
+                    self.pixels[self.width * (self.height - y) + x].color = self.colors[color]
+                except IndexError:
+                    pass
             else:
                 raise OutOfBoundsException(f'given y-coordinate {y} does not exist in the picture')
         else:
