@@ -4,7 +4,7 @@ class Polygon:
     matrix = None
     step = -1
 
-    def __init__(self, matrix, step=0.03, view=(0, 0, 1)):
+    def __init__(self, matrix, step=0.05, view=(0, 0, 1)):
         self.matrix = matrix
         self.step = step
         self.view = view
@@ -60,6 +60,7 @@ class Polygon:
             for j in range(len(p[i])):
                 try:
                     m.addPolygon(p[i][j], p[(i + 1) % a][j], p[(i + 1) % a][j + 1])
+                    m.addPolygon(p[i][j], p[(i + 1) % a][j + 1], p[i][j + 1])
                 except IndexError:
                     pass
 
@@ -76,6 +77,7 @@ class Polygon:
             for j in range(len(p[i])):
                 try:
                     m.addPolygon(p[i][j], p[(i + 1) % a][j], p[(i + 1) % a][j + 1])
+                    m.addPolygon(p[i][j], p[(i + 1) % a][j + 1], p[i][j + 1])
                 except IndexError:
                     pass
 
