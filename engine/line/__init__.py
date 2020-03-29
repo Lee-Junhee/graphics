@@ -99,8 +99,7 @@ class Line:
             self.oct7(x0, y0, x1, y1)
 
     def draw(self, matrix):
-        edges = matrix.getEdges()
-        matrix = matrix.content
-        for i in range(edges):
-            self.drawLine(int(matrix[0][2 * i]), int(matrix[1][2 * i]), 
-                    int(matrix[0][2 * i + 1]), int(matrix[1][2 * i + 1]))
+        lines = matrix.lines()
+        for line in lines:
+            self.drawLine(int(line[0]), int(line[1]), 
+                    int(line[2]), int(line[3]))

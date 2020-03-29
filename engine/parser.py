@@ -4,12 +4,11 @@ from line import Line
 from matrix import Matrix
 from transformation import Transformation
 from parametric import Parametric
-from frame import Frame
+from polygon import Polygon
 import subprocess
 
-def save(p, m, color, args):
+def save(l, m, args):
     p.clear()
-    l = Line(p, color)
     l.draw(m)
     if args[0][-4:] == '.ppm':
         p.fname = args[0]
@@ -22,16 +21,17 @@ def save(p, m, color, args):
     print(args[0])
 
 def parse(src, p, color):
+    l = Line(p, color)
     m = Matrix()
     t = Transformation()
     param = Parametric(m, .0001)
-    f = Frame(m, .1)
+    f = Polygon(m) 
     fxns = {
         'line': lambda args: m.addEdge((args[0], args[1], args[2]),(args[3], args[4], args[5])),
         'scale': lambda args: t.scale(args[0], args[1], args[2]),
         'move': lambda args: t.move(args[0], args[1], args[2]),
         'rotate': lambda args: t.rotate(args[0], args[1]),
-        'save': lambda args: save(p, m, color, args),
+        'save': lambda args: save(l, m, args),
         'circle': lambda args: param.arc((args[0], args[1], args[2]), args[3]),
         'hermite': lambda args: param.hermite((args[0], args[1]), (args[2], args[3]), (args[4], args[5]), (args[6], args[7])),
         'bezier': lambda args: param.bezier((args[0], args[1]), (args[2], args[3]), (args[4], args[5]), (args[6], args[7])),
@@ -56,15 +56,12 @@ def parse(src, p, color):
             cmdbuf = 'rotate'
         elif cmd == 'apply\n':
             print('apply')
-            t.transform.print()
             t.apply(m)
-            m.print()
             t = Transformation()
             cmdbuf = ''
         elif cmd == 'display\n':
             print('display')
             p.clear()
-            l = Line(p, color)
             l.draw(m)
             p.display()
             cmdbuf = ''
@@ -81,6 +78,7 @@ def parse(src, p, color):
         elif cmd == 'clear\n':
             print('clear')
             m = Matrix()
+            f.matrix = m
             cmdbuf = ''
         elif cmd == 'box\n':
             cmdbuf = 'box'
@@ -99,6 +97,5 @@ def parse(src, p, color):
                 except ValueError:
                     fargs.append(args[i])
             print(cmdbuf + ': ' + ','.join(args))
-            m.print()
             fxns[cmdbuf](fargs)
             cmdbuf = ''

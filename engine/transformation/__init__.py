@@ -12,7 +12,6 @@ class Transformation():
 
     def __init__(self):
         self.transform = Matrix()
-        self.transform.ident()
 
     def scale(self, sx=1, sy=1, sz=1):
         dilation = Matrix()
@@ -20,7 +19,7 @@ class Transformation():
         factor = [sx, sy, sz]
         for i in range(3):
             dilation.content[i][i] = factor[i]
-        Matrix.multiply(dilation, self.transform)
+        Matrix.multiply(dilation, self.transform.content)
 
     def move(self, tx=0, ty=0, tz=0):
         translation = Matrix()
@@ -28,7 +27,7 @@ class Transformation():
         addend = [tx, ty, tz]
         for i in range(3):
             translation.content[i][3] = addend[i]
-        Matrix.multiply(translation, self.transform)
+        Matrix.multiply(translation, self.transform.content)
     
     def rotate(self, axis="z", angle=0):
         r = self.r
@@ -39,7 +38,8 @@ class Transformation():
         rotation.content[r[axis][1]][r[axis][0]] = -sin(angle)
         rotation.content[r[axis][0]][r[axis][1]] = sin(angle)
         rotation.content[r[axis][1]][r[axis][1]] = cos(angle)
-        Matrix.multiply(rotation, self.transform)
+        Matrix.multiply(rotation, self.transform.content)
 
     def apply(self, content):
-        Matrix.multiply(self.transform, content)
+        Matrix.multiply(self.transform, content.edges)
+        Matrix.multiply(self.transform, content.polygons)
