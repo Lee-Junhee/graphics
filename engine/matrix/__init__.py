@@ -2,25 +2,45 @@ from polygon import Polygon
 
 class Matrix:
     view = None
-    content = None
     edges = None
     polygons = None
+    stack = None
 
-    def multiply(m1, m2):
-        #matrix multiplication code here
+    def multiply(m1, m2, t=False):
         for i in range(len(m2[0])):
             col = [0, 0, 0, 0]
             for j in range(4):
                 for k in range(4):
-                    col[k] += m1.content[k][j] * m2[j][i]
+                    col[k] += m1[k][j] * m2[j][i]
             for j in range(4):
                 m2[j][i] = col[j]
+                if t:
+                    m1[j][i] = col[j]
+
+    def ident():
+        return [
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+                ]
 
     def __init__(self, view=(0, 0, 1)):
         self.view = view
         self.edges = [[], [], [], []]
         self.polygons = [[], [], [], []]
-        self.ident()
+        self.stack = [[
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+                ]]
+
+    def push(self):
+        self.stack.append([[x for x in y] for y in self.stack[-1]])
+
+    def pop(self):
+        self.stack.pop(-1)
 
     def addPoint(matrix, point):
         for i in range(3):
@@ -35,14 +55,6 @@ class Matrix:
         Matrix.addPoint(self.polygons, p1)
         Matrix.addPoint(self.polygons, p2)
         Matrix.addPoint(self.polygons, p3)
-
-    def ident(self):
-        self.content = [
-                [1, 0, 0, 0],
-                [0, 1, 0, 0],
-                [0, 0, 1, 0],
-                [0, 0, 0, 1]
-                ]
 
     def print(self):
         print("Edges: ")
@@ -61,6 +73,7 @@ class Matrix:
         for i in range(len(matrix[3]) // 2):
             lines.append([int(matrix[0][2 * i]), int(matrix[1][2 * i]), 
                     int(matrix[0][2 * i + 1]), int(matrix[1][2 * i + 1])])
+        self.matrix = Matrix()
 
     def addPolygons(self, lines):
         matrix = self.polygons
@@ -75,7 +88,8 @@ class Matrix:
 
     def lines(self):
         l = []
+        Matrix.multiply(self.stack[-1], self.edges)
+        Matrix.multiply(self.stack[-1], self.polygons)
         self.addEdges(l)
         self.addPolygons(l)
-        print(self.polygons)
         return l

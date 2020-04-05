@@ -8,22 +8,21 @@ from polygon import Polygon
 import subprocess
 
 def save(l, m, args):
-    p.clear()
-    l.draw(m)
+    p = l.pic
     if args[0][-4:] == '.ppm':
         p.fname = args[0]
         p.commit()
     else:
-        p.fname = args[0][:-4] + '.ppm'
+        p.fname = args[0] + '.ppm'
         p.commit()
-        subprocess.run(['convert', args[0][:-4] + '.ppm', args[0]])
-        subprocess.run(['rm', args[0][:-4]+'.ppm'])
+        subprocess.run(['convert', args[0] + '.ppm', args[0]])
+        subprocess.run(['rm', args[0] + '.ppm'])
     print(args[0])
 
 def parse(src, p, color):
     l = Line(p, color)
     m = Matrix()
-    t = Transformation()
+    t = Transformation(m.stack)
     param = Parametric(m, .0001)
     f = Polygon(m) 
     fxns = {
@@ -45,24 +44,14 @@ def parse(src, p, color):
     for cmd in commands:
         if cmd == 'line\n':
             cmdbuf = 'line'
-        elif cmd == 'ident\n':
-            t = Transformation()
-            cmdbuf = ''
         elif cmd == 'scale\n':
             cmdbuf = 'scale'
         elif cmd == 'move\n':
             cmdbuf = 'move'
         elif cmd == 'rotate\n':
             cmdbuf = 'rotate'
-        elif cmd == 'apply\n':
-            print('apply')
-            t.apply(m)
-            t = Transformation()
-            cmdbuf = ''
         elif cmd == 'display\n':
             print('display')
-            p.clear()
-            l.draw(m)
             p.display()
             cmdbuf = ''
         elif cmd == 'save\n':
@@ -75,17 +64,16 @@ def parse(src, p, color):
             cmdbuf = 'hermite'
         elif cmd == 'bezier\n':
             cmdbuf = 'bezier'
-        elif cmd == 'clear\n':
-            print('clear')
-            m = Matrix()
-            f.matrix = m
-            cmdbuf = ''
         elif cmd == 'box\n':
             cmdbuf = 'box'
         elif cmd == 'sphere\n':
             cmdbuf = 'sphere'
         elif cmd == 'torus\n':
             cmdbuf = 'torus'
+        elif cmd == 'push\n':
+            m.push()
+        elif cmd == 'pop\n':
+            m.pop()
         elif cmd[0] == '#':
             pass
         else:
@@ -98,4 +86,6 @@ def parse(src, p, color):
                     fargs.append(args[i])
             print(cmdbuf + ': ' + ','.join(args))
             fxns[cmdbuf](fargs)
+            if cmdbuf in ['line', 'hermite', 'bezier', 'circle', 'box', 'sphere', 'torus']:
+                l.draw(m)
             cmdbuf = ''
