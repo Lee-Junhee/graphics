@@ -73,7 +73,7 @@ class Matrix:
         for i in range(len(matrix[3]) // 2):
             lines.append([int(matrix[0][2 * i]), int(matrix[1][2 * i]), 
                     int(matrix[0][2 * i + 1]), int(matrix[1][2 * i + 1])])
-        self.matrix = Matrix()
+        self.edges = [[], [], [], []]
 
     def addPolygons(self, lines):
         matrix = self.polygons
@@ -84,7 +84,7 @@ class Matrix:
                 lines.append([matrix[x][i] for x in range(2)] + [matrix[x][i + 1] for x in range(2)])
                 lines.append([matrix[x][i + 1] for x in range(2)] + [matrix[x][i + 2] for x in range(2)])
                 lines.append([matrix[x][i + 2] for x in range(2)] + [matrix[x][i] for x in range(2)])
-        self.matrix = Matrix()
+        self.polygons = [[], [], [], []]
 
     def lines(self):
         l = []
