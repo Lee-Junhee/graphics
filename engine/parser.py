@@ -87,5 +87,5 @@ def parse(src, p, color):
             print(cmdbuf + ': ' + ','.join(args))
             fxns[cmdbuf](fargs)
             if cmdbuf in ['line', 'hermite', 'bezier', 'circle', 'box', 'sphere', 'torus']:
-                l.draw(m)
+                m.draw(l)
             cmdbuf = ''

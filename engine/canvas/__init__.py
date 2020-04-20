@@ -23,11 +23,14 @@ class Picture:
             for y in range(width):
                 self.pixels += [Pixel(x, y, self.colors['background'])]
 
-    def set(self, x, y, color):
+    def plot(self, x, y, z, color):
         if -1 < x < self.width:
             if -1 < y < self.height:
                 try:
-                    self.pixels[self.width * (self.height - y) + x].color = self.colors[color]
+                    target = self.pixels[self.width * (self.height - y) + x]
+                    if target.z < z:
+                        target.color = self.colors[color]
+                        target.z = z
                 except IndexError:
                     pass
             else:
@@ -61,6 +64,7 @@ class Picture:
 class Pixel:
     x = -1
     y = -1
+    z = None
     color = None
 
     def __init__(self, x, y, color):

@@ -12,8 +12,8 @@ class Polygon:
     def addPoints(self, points, x, y, z):
         phi = 0
         while phi < 1:
-            theta = 0;
-            circ = [];
+            theta = 0
+            circ = []
             while theta < 1:
                 circ.append((x(theta, phi), y(theta, phi), z(theta, phi)))
                 theta += self.step
