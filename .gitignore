@@ -134,8 +134,8 @@ dmypy.json
 #image files
 *.ppm
 *.png
+*.gif
 
 #script files
 test
-simple_50.gif
-frame.gif
+
