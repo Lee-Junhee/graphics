@@ -7,7 +7,7 @@ submission for the final project of Stuyvesant High School's Computer Graphics c
   - light
 #### Commands that Require Modification
 - Changing the behavior of vary
-  - vary beginnning end f(x)
+  - vary knob beginnning end f(x)
 - Super-sampling
   - super multiplier
 - Moving lights using vary
