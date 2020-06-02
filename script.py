@@ -112,12 +112,12 @@ def run(filename):
     ambient = [50,
                50,
                50]
-    light = [[0.5,
+    light = [[l[1]['location'], l[1]['color']] for l in symbols.values() if l[0] == 'light'] or [[[0.5,
               0.75,
               1],
              [255,
               255,
-              255]]
+              255]]]
 
     color = [0, 0, 0]
     symbols['.white'] = ['constants',
@@ -148,7 +148,22 @@ def run(filename):
             frame = frames[f]
             for knob in frame:
                 symbols[knob][1] = frame[knob]
-                print('\tkob: ' + knob + '\tvalue: ' + str(frame[knob]))
+                print('\tknob: ' + knob + '\tvalue: ' + str(frame[knob]))
+            tmp = []
+            for command in commands:
+                if command['op'] == 'light':
+                    args = command['args']
+                    knob_value = symbols[command['knob']][1] if command['knob'] else 0
+                    if knob_value:
+                        tmp += [[
+                            [args[x] + (args[x + 6] - args[x]) * knob_value for x in range(3)],
+                            [args[x] + (args[x + 6] - args[x]) * knob_value for x in range(3, 6)]
+                            ]]
+                    else:
+                        tmp += [[args[:3], args[3:6]]]
+            light = tmp or light
+            print(light)
+            tmp = []
 
         for command in commands:
             print(command)
@@ -228,7 +243,7 @@ def run(filename):
             # end operation loop
         if num_frames > 1:
             fname = 'anim/%s%03d.png'%(name, f)
-            print('Saving frame: '  + fname)
+            print('Saving frame: ' + fname)
             save_extension(screen, fname)
         # end fromes loop
     if num_frames > 1:

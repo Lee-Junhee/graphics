@@ -21,9 +21,7 @@ COLOR = 1
 SPECULAR_EXP = 4
 
 #lighting functions
-def get_lighting(normal, view, ambient, light, symbols, reflect ):
-
-    lights = [[l[1]['location'], l[1]['color']] for l in symbols.values() if l[0] == 'light'] or [light]
+def get_lighting(normal, view, ambient, lights, symbols, reflect ):
 
     n = normal[:]
     normalize(n)
@@ -34,7 +32,7 @@ def get_lighting(normal, view, ambient, light, symbols, reflect ):
     i = [int(a[RED]), int(a[GREEN]), int(a[BLUE])]
     for light in lights:
         normalize(light[LOCATION])
-        
+
         d = calculate_diffuse(light, r, n)
         s = calculate_specular(light, r, view, n)
 
