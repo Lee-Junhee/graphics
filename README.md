@@ -11,4 +11,4 @@ submission for the final project of Stuyvesant High School's Computer Graphics c
 - Super-sampling
   - super multiplier
 - Moving lights using vary
-  - light name x y z r g b x y z r g b knob
+  - light name x0 y0 z0 r0 g0 b0 x1 y1 z1 r1 g1 b1 knob
