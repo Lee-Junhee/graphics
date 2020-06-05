@@ -2,6 +2,7 @@ import mdl
 from display import *
 from matrix import *
 from draw import *
+from equation import parse
 
 """======== first_pass( commands ) ==========
 
@@ -81,16 +82,30 @@ def second_pass( commands, num_frames ):
                 print('Invalid vary command for knob: ' + knob_name)
                 exit()
 
-            delta = (end_value - start_value) / (end_frame - start_frame)
+            if len(args) < 4:
+                delta = (end_value - start_value) / (end_frame - start_frame)
 
-            for f in range(num_frames):
-                if f == start_frame:
-                    value = start_value
-                    frames[f][knob_name] = value
-                elif f >= start_frame and f <= end_frame:
-                    value = start_value + delta * (f - start_frame)
-                    frames[f][knob_name] = value
-                #print 'knob: ' + knob_name + '\tvalue: ' + str(frames[f][knob_name])
+                for f in range(num_frames):
+                    if f == start_frame:
+                        value = start_value
+                        frames[f][knob_name] = value
+                    elif f >= start_frame and f <= end_frame:
+                        value = start_value + delta * (f - start_frame)
+                        frames[f][knob_name] = value
+                    #print 'knob: ' + knob_name + '\tvalue: ' + str(frames[f][knob_name])
+            else:
+                fxn = parse(args[4])
+                start_value_eq = fxn(start_frame)
+                end_value_eq = fxn(end_frame)
+                if start_value_eq == end_value_eq:
+                    print('Invalid equation for vary: ' + args[4])
+                    exit()
+                else:
+                    factor = (end_value - start_value) / (end_value_eq - start_value_eq)
+                    diff = (start_value_eq * factor) - start_value
+                    for f in range(num_frames):
+                        if f >= start_frame and f <= end_frame:
+                            frames[f][knob_name] = fxn(f) * factor - diff
     return frames
 
 
