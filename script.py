@@ -2,7 +2,6 @@ import mdl
 from display import *
 from matrix import *
 from draw import *
-from equation import parse
 
 """======== first_pass( commands ) ==========
 
@@ -82,7 +81,6 @@ def second_pass( commands, num_frames ):
                 print('Invalid vary command for knob: ' + knob_name)
                 exit()
 
-            # if len(args) == 4:
             delta = (end_value - start_value) / (end_frame - start_frame)
 
             for f in range(num_frames):
@@ -92,32 +90,7 @@ def second_pass( commands, num_frames ):
                 elif f >= start_frame and f <= end_frame:
                     value = start_value + delta * (f - start_frame)
                     frames[f][knob_name] = value
-                    #print 'knob: ' + knob_name + '\tvalue: ' + str(frames[f][knob_name])
-            # else:
-            #     fxn = parse('x')
-            #     if args[2] == 1:
-            #         fxn = parse('2^x')
-            #     elif args[2] == 2:
-            #         fxn = parse('x^2')
-            #     elif args[2] == 3:
-            #         fxn = parse('x^3')
-            #     elif args[2] == 4:
-            #         fxn = parse('log(x)')
-            #     elif args[2] == 5:
-            #         fxn = parse('sin(x)')
-            #     elif args[2] == 6:
-            #         fxn = parse('1/x')
-            #     start_value_eq = fxn(start_frame)
-            #     end_value_eq = fxn(end_frame)
-            #     if start_value_eq == end_value_eq:
-            #         print('Invalid equation for vary: ' + args[4])
-            #         exit()
-            #     else:
-            #         factor = (end_value - start_value) / (end_value_eq - start_value_eq)
-            #         diff = (start_value_eq * factor) - start_value
-            #         for f in range(num_frames):
-            #             if f >= start_frame and f <= end_frame:
-            #                 frames[f][knob_name] = fxn(f) * factor - diff
+                #print 'knob: ' + knob_name + '\tvalue: ' + str(frames[f][knob_name])
     return frames
 
 
@@ -202,8 +175,8 @@ def run(filename):
                 if command['constants']:
                     reflect = command['constants']
                 add_box(tmp,
-                        2*args[0], 2*args[1], 2*args[2],
-                        2*args[3], 2*args[4], 2*args[5])
+                        args[0], args[1], args[2],
+                        args[3], args[4], args[5])
                 matrix_mult( stack[-1], tmp )
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
@@ -212,7 +185,7 @@ def run(filename):
                 if command['constants']:
                     reflect = command['constants']
                 add_sphere(tmp,
-                           2*args[0], 2*args[1], 2*args[2], 2*args[3], step_3d)
+                           args[0], args[1], args[2], args[3], step_3d)
                 matrix_mult( stack[-1], tmp )
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
@@ -221,21 +194,21 @@ def run(filename):
                 if command['constants']:
                     reflect = command['constants']
                 add_torus(tmp,
-                          2*args[0], 2*args[1], 2*args[2], 2*args[3], 2*args[4], step_3d)
+                          args[0], args[1], args[2], args[3], args[4], step_3d)
                 matrix_mult( stack[-1], tmp )
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
             elif c == 'line':
                 add_edge(tmp,
-                         2*args[0], 2*args[1], 2*args[2], 2*args[3], 2*args[4], 2*args[5])
+                         args[0], args[1], args[2], args[3], args[4], args[5])
                 matrix_mult( stack[-1], tmp )
                 draw_lines(tmp, screen, zbuffer, color)
                 tmp = []
             elif c == 'move':
                 if command['knob']:
                     knob_value = symbols[command['knob']][1]
-                tmp = make_translate(2*args[0] * knob_value, 2*args[1] * knob_value, 2*args[2] * knob_value)
+                tmp = make_translate(args[0] * knob_value, args[1] * knob_value, args[2] * knob_value)
                 matrix_mult(stack[-1], tmp)
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []
