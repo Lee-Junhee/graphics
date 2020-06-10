@@ -175,8 +175,8 @@ def run(filename):
                 if command['constants']:
                     reflect = command['constants']
                 add_box(tmp,
-                        args[0], args[1], args[2],
-                        args[3], args[4], args[5])
+                        2*args[0], 2*args[1], 2*args[2],
+                        2*args[3], 2*args[4], 2*args[5])
                 matrix_mult( stack[-1], tmp )
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
@@ -185,7 +185,7 @@ def run(filename):
                 if command['constants']:
                     reflect = command['constants']
                 add_sphere(tmp,
-                           args[0], args[1], args[2], args[3], step_3d)
+                           2*args[0], 2*args[1], 2*args[2], 2*args[3], step_3d)
                 matrix_mult( stack[-1], tmp )
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
@@ -194,21 +194,21 @@ def run(filename):
                 if command['constants']:
                     reflect = command['constants']
                 add_torus(tmp,
-                          args[0], args[1], args[2], args[3], args[4], step_3d)
+                          2*args[0], 2*args[1], 2*args[2], 2*args[3], 2*args[4], step_3d)
                 matrix_mult( stack[-1], tmp )
                 draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
                 tmp = []
                 reflect = '.white'
             elif c == 'line':
                 add_edge(tmp,
-                         args[0], args[1], args[2], args[3], args[4], args[5])
+                         2*args[0], 2*args[1], 2*args[2], 2*args[3], 2*args[4], 2*args[5])
                 matrix_mult( stack[-1], tmp )
                 draw_lines(tmp, screen, zbuffer, color)
                 tmp = []
             elif c == 'move':
                 if command['knob']:
                     knob_value = symbols[command['knob']][1]
-                tmp = make_translate(args[0] * knob_value, args[1] * knob_value, args[2] * knob_value)
+                tmp = make_translate(2*args[0] * knob_value, 2*args[1] * knob_value, 2*args[2] * knob_value)
                 matrix_mult(stack[-1], tmp)
                 stack[-1] = [x[:] for x in tmp]
                 tmp = []

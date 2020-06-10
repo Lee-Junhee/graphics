@@ -2,8 +2,8 @@ from subprocess import Popen, PIPE
 from os import remove, fork, execlp
 
 #constants
-XRES = 500
-YRES = 500
+XRES = 2*500
+YRES = 2*500
 MAX_COLOR = 255
 RED = 0
 GREEN = 1
@@ -45,7 +45,24 @@ def clear_zbuffer( zb ):
         for x in range( len(zb[y]) ):
             zb[y][x] = float('-inf')
 
+def condense(screen):
+    s = []
+    for y in range(0, len(screen), 2):
+        row = []
+        for x in range(0, len(screen[0]), 2):
+            pixel = [0, 0, 0]
+            pixel[RED] = int((screen[y][x][RED] + screen[y][x+1][RED] + screen[y+1][x][RED] + screen[y+1][x+1][RED]) / 4)
+            pixel[GREEN] = int((screen[y][x][GREEN] + screen[y][x+1][GREEN] + screen[y+1][x][GREEN] + screen[y+1][x+1][GREEN]) / 4)
+            pixel[BLUE] = int((screen[y][x][BLUE] + screen[y][x+1][BLUE] + screen[y+1][x][BLUE] + screen[y+1][x+1][BLUE]) / 4)
+            row.append(pixel)
+        s.append(row)
+    while len(screen) > 0:
+        screen.pop()
+    for x in s:
+        screen.append(x)
+
 def save_ppm( screen, fname ):
+    condense(screen)
     f = open( fname, 'w' )
     ppm = 'P3\n' + str(len(screen[0])) +' '+ str(len(screen)) +' '+ str(MAX_COLOR) +'\n'
     for y in range( len(screen) ):
