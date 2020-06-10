@@ -1,4 +1,4 @@
 frames 100
 move 500 500 0 yeet
 sphere 0 0 0 50
-vary yeet 0 99 0 1 1
+vary yeet 0 99 [x*(x-1/2)^2]

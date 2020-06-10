@@ -2,6 +2,7 @@ import mdl
 from display import *
 from matrix import *
 from draw import *
+from equation import parse
 
 """======== first_pass( commands ) ==========
 
@@ -71,8 +72,6 @@ def second_pass( commands, num_frames ):
             knob_name = command['knob']
             start_frame = args[0]
             end_frame = args[1]
-            start_value = float(args[2])
-            end_value = float(args[3])
             value = 0
 
             if ((start_frame < 0) or
@@ -81,16 +80,25 @@ def second_pass( commands, num_frames ):
                 print('Invalid vary command for knob: ' + knob_name)
                 exit()
 
-            delta = (end_value - start_value) / (end_frame - start_frame)
+            if len(args) == 4:
+                start_value = float(args[2])
+                end_value = float(args[3])
 
-            for f in range(num_frames):
-                if f == start_frame:
-                    value = start_value
-                    frames[f][knob_name] = value
-                elif f >= start_frame and f <= end_frame:
-                    value = start_value + delta * (f - start_frame)
-                    frames[f][knob_name] = value
-                #print 'knob: ' + knob_name + '\tvalue: ' + str(frames[f][knob_name])
+                delta = (end_value - start_value) / (end_frame - start_frame)
+
+                for f in range(num_frames):
+                    if f == start_frame:
+                        value = start_value
+                        frames[f][knob_name] = value
+                    elif f >= start_frame and f <= end_frame:
+                        value = start_value + delta * (f - start_frame)
+                        frames[f][knob_name] = value
+                    #print 'knob: ' + knob_name + '\tvalue: ' + str(frames[f][knob_name])
+            else:
+                fxn = parse(args[2])
+                for f in range(num_frames):
+                    if f >= start_frame and f <= end_frame:
+                        frames[f][knob_name] = fxn(f / (end_frame - start_frame))
     return frames
 
 

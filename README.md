@@ -6,8 +6,23 @@ submission for the final project of Stuyvesant High School's Computer Graphics c
 - Multiple light sources
   - light
 #### Commands that Require Modification
-- ~~Changing the behavior of vary~~ lex keeps yelling at me so I'll just give up
-  - ~~vary beginnning end f(x)~~
+- Changing the behavior of vary
+  - vary beginnning end \[f(x)\]
+    - The function must be enclosed in brackets
+    - The function supports the following functions and their combinations:
+      - \+
+      - \-
+      - \*
+      - /
+      - % (modulo)
+      - ^ / \*\* (exponentiation)
+      - sin
+      - cos
+      - tan
+      - log
+    - The function can also include the following constants:
+      - pi
+      - e
 - Super-sampling
   - super samples to 2x
 - Moving lights using vary

@@ -1,6 +1,7 @@
 from ply import lex, yacc
 
 tokens = (
+    "FXN",
     "STRING",
     "ID",
     "XYZ",
@@ -88,6 +89,11 @@ def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     if t.value in reserved:
         t.type = reserved.get(t.value)
+    return t
+
+def t_FXN(t):
+    r'\[[0-9acegilnopstx\+\-\*\/\^\%\(\)]*x[0-9acegilnopstx\+\-\*\/\^\%\(\)]*\]'
+    t.value = t.value.strip('[]')
     return t
 
 def t_STRING(t):
@@ -279,7 +285,8 @@ def p_command_basename(p):
     commands.append(cmd)
 
 def p_command_vary(p):
-    """command : VARY SYMBOL NUMBER NUMBER NUMBER NUMBER"""
+    """command : VARY SYMBOL NUMBER NUMBER NUMBER NUMBER
+               | VARY SYMBOL NUMBER NUMBER FXN"""
     cmd = {'op' : p[1], 'args' : p[3:], 'knob' : p[2]}
     symbols[p[2]] = ['knob', 0]
     commands.append(cmd)
